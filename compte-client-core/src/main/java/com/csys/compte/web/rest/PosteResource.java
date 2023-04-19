@@ -38,15 +38,7 @@ public class PosteResource {
     this.posteService=posteService;
   }
 
-  /**
-   * POST  /postes : Create a new poste.
-   *
-   * @param posteDTO
-   * @param bindingResult
-   * @return the ResponseEntity with status 201 (Created) and with body the new poste, or with status 400 (Bad Request) if the poste has already an ID
-   * @throws URISyntaxException if the Location URI syntax is incorrect
-   * @throws org.springframework.web.bind.MethodArgumentNotValidException
-   */
+ 
   @PostMapping("/postes")
   public ResponseEntity<PosteDTO> createPoste(@Valid @RequestBody PosteDTO posteDTO, BindingResult bindingResult) throws URISyntaxException, MethodArgumentNotValidException {
     log.debug("REST request to save Poste : {}", posteDTO);
@@ -61,16 +53,7 @@ public class PosteResource {
     return ResponseEntity.created( new URI("/api/postes/"+ result.getIdPoste())).body(result);
   }
 
-  /**
-   * PUT  /postes : Updates an existing poste.
-   *
-   * @param id
-   * @param posteDTO the poste to update
-   * @return the ResponseEntity with status 200 (OK) and with body the updated poste,
-   * or with status 400 (Bad Request) if the poste is not valid,
-   * or with status 500 (Internal Server Error) if the poste couldn't be updated
-   * @throws org.springframework.web.bind.MethodArgumentNotValidException
-   */
+ 
   @PutMapping("/postes/{id}")
   public ResponseEntity<PosteDTO> updatePoste( @Valid @RequestBody PosteDTO posteDTO) throws MethodArgumentNotValidException {
     log.debug("Request to update Poste: {}");
@@ -78,12 +61,7 @@ public class PosteResource {
     return ResponseEntity.ok().body(result);
   }
 
-  /**
-   * GET /postes/{id} : get the "id" poste.
-   *
-   * @param id the id of the poste to retrieve
-   * @return the ResponseEntity with status 200 (OK) and with body of poste, or with status 404 (Not Found)
-   */
+  
   @GetMapping("/postes/{id}")
   public ResponseEntity<PosteDTO> getPoste(@PathVariable Integer id) {
     log.debug("Request to get Poste: {}",id);
@@ -92,23 +70,13 @@ public class PosteResource {
     return ResponseEntity.ok().body(dto);
   }
 
-  /**
-   * GET /postes : get all the postes.
-   *
-   * @return the ResponseEntity with status 200 (OK) and the list of postes in body
-   */
   @GetMapping("/postes")
   public Collection<PosteDTO> getAllPostes() {
     log.debug("Request to get all  Postes : {}");
     return posteService.findAll();
   }
 
-  /**
-   * DELETE  /postes/{id} : delete the "id" poste.
-   *
-   * @param id the id of the poste to delete
-   * @return the ResponseEntity with status 200 (OK)
-   */
+
   @DeleteMapping("/postes/{id}")
   public ResponseEntity<Void> deletePoste(@PathVariable Integer id) {
     log.debug("Request to delete Poste: {}",id);

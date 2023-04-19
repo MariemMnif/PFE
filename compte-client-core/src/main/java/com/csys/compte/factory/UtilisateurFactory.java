@@ -1,13 +1,12 @@
 package com.csys.compte.factory;
 
-
 import com.csys.compte.domain.Utilisateur;
 import com.csys.compte.dto.UtilisateurDTO;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class UtilisateurFactory  {
+public class UtilisateurFactory {
 
     public static UtilisateurDTO utilisateurToUtilisateurDTO(Utilisateur utilisateur) {
         UtilisateurDTO utilisateurDTO = new UtilisateurDTO();
@@ -18,9 +17,9 @@ public class UtilisateurFactory  {
         utilisateurDTO.setRole(utilisateur.getRole());
         utilisateurDTO.setActif(utilisateur.getActif());
         utilisateurDTO.setModuleList(utilisateur.getModuleList());
-        utilisateurDTO.setClientmoduleversionList(utilisateur.getClientmoduleversionList());
+      //  utilisateurDTO.setClientmoduleversionList(utilisateur.getClientmoduleversionList());
         utilisateurDTO.setIdPoste(utilisateur.getPoste().getIdPoste());
-         utilisateurDTO.setPosteDTO(PosteFactory.posteToPosteDTO(utilisateur.getPoste()));
+        utilisateurDTO.setPosteDTO(PosteFactory.posteToPosteDTO(utilisateur.getPoste()));
         return utilisateurDTO;
     }
 

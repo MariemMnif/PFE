@@ -7,8 +7,12 @@ package com.csys.compte.domain;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,10 +23,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-/**
- *
- * @author FATMA-PC
- */
+
 @Entity
 @Table(name = "Serveur")
 @NamedQueries({
@@ -32,19 +33,24 @@ public class Serveur implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_serveur")
     private Integer idServeur;
+    
     @Size(max = 50)
     @Column(name = "adresse_ip")
     private String adresseIp;
+    
     @Column(name = "actif")
     private Boolean actif;
-    @OneToMany(mappedBy = "idServeur")
+    
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY,mappedBy = "idServeur")
     private List<Accesserveur> accesserveurList;
+    
     @JoinColumn(name = "id_client", referencedColumnName = "id_client")
     @ManyToOne
     private Client idClient;
+    
     @JoinColumn(name = "id_type_serveur", referencedColumnName = "id_type_serveur")
     @ManyToOne
     private Typeserveur idTypeServeur;

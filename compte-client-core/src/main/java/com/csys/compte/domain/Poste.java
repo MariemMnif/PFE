@@ -20,10 +20,6 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.envers.Audited;
 
-/**
- *
- * @author FATMA-PC
- */
 
 @Entity
 @Table(name = "Poste")

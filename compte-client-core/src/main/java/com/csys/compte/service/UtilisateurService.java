@@ -14,9 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- * Service Implementation for managing Utilisateur.
- */
+
 @Service
 @Transactional
 public class UtilisateurService {
@@ -31,34 +29,35 @@ public class UtilisateurService {
         this.posteService = posteService;
     }
 
-    /**
-     * Save a utilisateurDTO.
-     *
-     * @param utilisateurDTO
-     * @return the persisted entity
-     */
+    
     public UtilisateurDTO save(UtilisateurDTO utilisateurDTO) {
         log.debug("Request to save Utilisateur: {}", utilisateurDTO);
+        //verif user  existe ou non 
+        Utilisateur inBase = utilisateurRepository.findByUserName(utilisateurDTO.getUsername());
+        Preconditions.checkArgument(inBase == null, "utilisateur existe deja");
+        //Poste
         Poste poste = posteService.findPoste(utilisateurDTO.getIdPoste());
         Preconditions.checkArgument(poste != null, "La poste n'existe pas");
-        Utilisateur utilisateur = UtilisateurFactory.utilisateurDTOToUtilisateur(utilisateurDTO,null);
+        
+        Utilisateur utilisateur = UtilisateurFactory.utilisateurDTOToUtilisateur(utilisateurDTO, null);
         utilisateur.setPoste(poste);
         utilisateur = utilisateurRepository.save(utilisateur);
         UtilisateurDTO resultDTO = UtilisateurFactory.utilisateurToUtilisateurDTO(utilisateur);
         return resultDTO;
     }
 
-    /**
-     * Update a utilisateurDTO.
-     *
-     * @param utilisateurDTO
-     * @return the updated entity
-     */
+  
     public UtilisateurDTO update(UtilisateurDTO utilisateurDTO) {
         log.debug("Request to update Utilisateur: {}", utilisateurDTO);
         Utilisateur inBase = utilisateurRepository.findByUserName(utilisateurDTO.getUsername());
         Preconditions.checkArgument(inBase != null, "utilisateur n'existe pas");
-        Utilisateur utilisateur = UtilisateurFactory.utilisateurDTOToUtilisateur(utilisateurDTO,inBase);
+        //Poste
+        Poste poste = posteService.findPoste(utilisateurDTO.getIdPoste());
+        Preconditions.checkArgument(poste != null, "La poste n'existe pas");
+        
+        Utilisateur utilisateur = UtilisateurFactory.utilisateurDTOToUtilisateur(utilisateurDTO, inBase);
+        utilisateur.setPoste(poste);
+        
         utilisateur = utilisateurRepository.save(utilisateur);
         UtilisateurDTO resultDTO = UtilisateurFactory.utilisateurToUtilisateurDTO(utilisateur);
         return resultDTO;

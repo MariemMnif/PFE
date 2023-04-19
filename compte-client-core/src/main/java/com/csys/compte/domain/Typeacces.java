@@ -9,6 +9,8 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -20,10 +22,6 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-/**
- *
- * @author FATMA-PC
- */
 @Entity
 @Table(name = "Type_acces")
 @NamedQueries({
@@ -34,14 +32,14 @@ public class Typeacces implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_type_acces")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idTypeAcces;
     @Size(max = 50)
     @Column(name = "designation")
     private String designation;
     @Column(name = "actif")
-    private Boolean actif;   
+    private Boolean actif;
     @OneToMany(mappedBy = "idTypeAcces")
     private List<Accesserveur> accesserveurList;
 
@@ -108,5 +106,5 @@ public class Typeacces implements Serializable {
     public String toString() {
         return "com.csys.compte.domain.Typeacces[ idTypeAcces=" + idTypeAcces + " ]";
     }
-    
+
 }

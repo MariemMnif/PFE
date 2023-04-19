@@ -7,8 +7,12 @@ package com.csys.compte.domain;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -29,21 +33,22 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "Language.findAll", query = "SELECT l FROM Language l")})
 public class Language implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_language")
-    private Integer idLanguage;
     @Size(max = 50)
     @Column(name = "designation")
     private String designation;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_language")
+    private Integer idLanguage;
+
     @Column(name = "actif")
     private Boolean actif;
-    @JoinTable(name = "Module_Language", joinColumns = {
-        @JoinColumn(name = "id_language", referencedColumnName = "id_language")}, inverseJoinColumns = {
-        @JoinColumn(name = "id_module", referencedColumnName = "id_module")})
-    @ManyToMany
+
+    // @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "languageList")
+    @ManyToMany( fetch = FetchType.LAZY, mappedBy = "languageList")
     private List<Module> moduleList;
 
     public Language() {
@@ -59,14 +64,6 @@ public class Language implements Serializable {
 
     public void setIdLanguage(Integer idLanguage) {
         this.idLanguage = idLanguage;
-    }
-
-    public String getDesignation() {
-        return designation;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
     }
 
     public Boolean getActif() {
@@ -109,5 +106,13 @@ public class Language implements Serializable {
     public String toString() {
         return "com.csys.compte.domain.Language[ idLanguage=" + idLanguage + " ]";
     }
-    
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
+    }
+
 }

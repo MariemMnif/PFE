@@ -9,6 +9,8 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -18,10 +20,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import org.hibernate.envers.Audited;
 
-/**
- *
- * @author FATMA-PC
- */
+
 @Entity
 @Table(name = "Secteur")
 @NamedQueries({
@@ -32,14 +31,17 @@ public class Secteur implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_secteur")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idSecteur;
+    
     @Size(max = 50)
     @Column(name = "designation")
     private String designation;
+    
     @Column(name = "actif")
     private Boolean actif;
+    
     @OneToMany(mappedBy = "idSecteur")
     private List<Client> clientList;
 

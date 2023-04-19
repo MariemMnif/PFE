@@ -12,75 +12,70 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
 @Transactional
 public class PosteService {
-  private final Logger log = LoggerFactory.getLogger(PosteService.class);
 
-  private final PosteRepository posteRepository;
+    private final Logger log = LoggerFactory.getLogger(PosteService.class);
 
-  public PosteService(PosteRepository posteRepository) {
-    this.posteRepository=posteRepository;
-  }
+    private final PosteRepository posteRepository;
 
-  // Save a posteDTO.
-  
-  public PosteDTO save(PosteDTO posteDTO) {
-    log.debug("Request to save Poste: {}",posteDTO);
-    Poste poste = PosteFactory.posteDTOToPoste(posteDTO,null);
-    poste = posteRepository.save(poste);
-    PosteDTO resultDTO = PosteFactory.posteToPosteDTO(poste);
-    return resultDTO;
-  }
+    public PosteService(PosteRepository posteRepository) {
+        this.posteRepository = posteRepository;
+    }
 
-  
-  // Update a posteDTO.
-  
-  public PosteDTO update(PosteDTO posteDTO) {
-    log.debug("Request to update Poste: {}",posteDTO);
-    Poste inBase= posteRepository.findByIdPoste(posteDTO.getIdPoste());
-    Preconditions.checkArgument(inBase != null, "La poste n'existe pas");
-    Poste poste = PosteFactory.posteDTOToPoste(posteDTO,inBase);
-    poste = posteRepository.save(poste);
-    PosteDTO resultDTO = PosteFactory.posteToPosteDTO(poste);
-    return resultDTO;
-  }
+   
+    public PosteDTO save(PosteDTO posteDTO) {
+        log.debug("Request to save Poste: {}", posteDTO);
+        //verif poste existe ou non 
+        Poste posteinBase = posteRepository.findByDesignation(posteDTO.getDesignation());
+        Preconditions.checkArgument(posteinBase == null, "Le poste existe deja");
+        Poste poste = PosteFactory.posteDTOToPoste(posteDTO, null);
+        poste = posteRepository.save(poste);
+        PosteDTO resultDTO = PosteFactory.posteToPosteDTO(poste);
+        return resultDTO;
+    }
 
-  // Get one posteDTO by id.
-  
-  @Transactional( readOnly = true)
-  public PosteDTO findOne(Integer id) {
-    log.debug("Request to get Poste: {}",id);
-    Poste poste= posteRepository.findByIdPoste(id);
-    PosteDTO dto = PosteFactory.posteToPosteDTO(poste);
-    return dto;
-  }
+   
+    public PosteDTO update(PosteDTO posteDTO) {
+        log.debug("Request to update Poste: {}", posteDTO);
+        Poste inBase = posteRepository.findByIdPoste(posteDTO.getIdPoste());
+        Preconditions.checkArgument(inBase != null, "La poste n'existe pas");
+        Poste poste = PosteFactory.posteDTOToPoste(posteDTO, inBase);
+        poste = posteRepository.save(poste);
+        PosteDTO resultDTO = PosteFactory.posteToPosteDTO(poste);
+        return resultDTO;
+    }
 
+   
+    @Transactional(readOnly = true)
+    public PosteDTO findOne(Integer id) {
+        log.debug("Request to get Poste: {}", id);
+        Poste poste = posteRepository.findByIdPoste(id);
+        PosteDTO dto = PosteFactory.posteToPosteDTO(poste);
+        return dto;
+    }
 
-  // Get one poste by id.
-
-  @Transactional(readOnly = true)
-  public Poste findPoste(Integer id) {
-    log.debug("Request to get Poste: {}",id);
-    Poste poste= posteRepository.findByIdPoste(id);
-    return poste;
-  }
-
-  // Get all the postes.
-  
-  @Transactional(readOnly = true)
-  public Collection<PosteDTO> findAll() {
-    log.debug("Request to get All Postes");
-    Collection<Poste> result= posteRepository.findAll();
-    return PosteFactory.posteToPosteDTOs(result);
-  }
-
-  // Delete poste by id.
  
-  public void delete(Integer id) {
-    log.debug("Request to delete Poste: {}",id);
-    posteRepository.deleteById(id);
-  }
-}
+    @Transactional(readOnly = true)
+    public Poste findPoste(Integer id) {
+        log.debug("Request to get Poste: {}", id);
+        Poste poste = posteRepository.findByIdPoste(id);
+        return poste;
+    }
+   
 
+    // Get all the postes.
+    @Transactional(readOnly = true)
+    public Collection<PosteDTO> findAll() {
+        log.debug("Request to get All Postes");
+        Collection<Poste> result = posteRepository.findAll();
+        return PosteFactory.posteToPosteDTOs(result);
+    }
+
+    // Delete poste by id.
+    public void delete(Integer id) {
+        log.debug("Request to delete Poste: {}", id);
+        posteRepository.deleteById(id);
+    }
+}

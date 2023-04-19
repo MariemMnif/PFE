@@ -11,6 +11,9 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -40,25 +43,30 @@ public class Version implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_version")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idVersion;
+
     @Size(max = 50)
     @Column(name = "numero")
     private String numero;
+
     @Size(max = 50)
     @Column(name = "description")
     private String description;
+
     @Column(name = "date_effet")
     @Temporal(TemporalType.DATE)
     private Date dateEffet;
+
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "version")
     private List<Clientmoduleversion> clientmoduleversionList;
+
     @JoinColumn(name = "id_module", referencedColumnName = "id_module")
-    @ManyToOne
-    private Module idModule;
+    @ManyToOne (fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    private Module module;
 
     public Version() {
     }
@@ -107,12 +115,12 @@ public class Version implements Serializable {
         this.clientmoduleversionList = clientmoduleversionList;
     }
 
-    public Module getIdModule() {
-        return idModule;
+    public Module getModule() {
+        return module;
     }
 
-    public void setIdModule(Module idModule) {
-        this.idModule = idModule;
+    public void setModule(Module module) {
+        this.module = module;
     }
 
     @Override

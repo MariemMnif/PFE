@@ -10,6 +10,8 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,10 +25,7 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-/**
- *
- * @author FATMA-PC
- */
+
 @Entity
 @Table(name = "Client")
 @NamedQueries({
@@ -37,30 +36,38 @@ public class Client implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_client")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idClient;
+    
     @Size(max = 50)
     @Column(name = "raison_sociale")
     private String raisonSociale;
+    
     @Size(max = 50)
     @Column(name = "dns")
     private String dns;
+    
     @Column(name = "actif")
     private Boolean actif;
+    
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @OneToMany(mappedBy = "idClient")
     private List<Serveur> serveurList;
+    
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "client")
     private List<Clientmoduleversion> clientmoduleversionList;
+    
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @JoinColumn(name = "id_region", referencedColumnName = "id_region")
+    
     @ManyToOne
     private Region idRegion;
+    
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @JoinColumn(name = "id_secteur", referencedColumnName = "id_secteur")

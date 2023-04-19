@@ -14,5 +14,6 @@ import org.springframework.stereotype.Repository;
 public interface PosteRepository extends JpaRepository<Poste, Integer> {
   Collection<Poste> findByActif(Boolean actif);
   Poste findByIdPoste(Integer idPoste);
+  Poste findByDesignation(String designation);
 }
 

@@ -10,6 +10,9 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -35,31 +38,43 @@ import org.hibernate.envers.RelationTargetAuditMode;
 @Audited
 public class Module implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_module")
-    private Integer idModule;
     @Size(max = 50)
     @Column(name = "designation")
     private String designation;
+
+    private static final long serialVersionUID = 1L;
+    @Id
+    @Basic(optional = false)
+    @Column(name = "id_module")
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer idModule;
+    
+ 
+    
     @Column(name = "actif")
     private Boolean actif;
+    
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
-    @ManyToMany(mappedBy = "moduleList")
+    //@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany( fetch = FetchType.LAZY)
+     @JoinTable(name = "Module_Language", joinColumns = {
+        @JoinColumn(name = "id_module", referencedColumnName = "id_module")}, inverseJoinColumns = {
+        @JoinColumn(name = "id_language", referencedColumnName = "id_language")})  
     private List<Language> languageList;
+    
     @JoinTable(name = "Utilisateur_module", joinColumns = {
         @JoinColumn(name = "id_module", referencedColumnName = "id_module")}, inverseJoinColumns = {
         @JoinColumn(name = "id_utilisateur", referencedColumnName = "user_name")})
     @ManyToMany
     private List<Utilisateur> utilisateurList;
+    
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "module")
     private List<Clientmoduleversion> clientmoduleversionList;
-    @OneToMany(mappedBy = "idModule")
+  
+    @OneToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "module")
     private List<Version> versionList;
 
     public Module() {
@@ -77,13 +92,6 @@ public class Module implements Serializable {
         this.idModule = idModule;
     }
 
-    public String getDesignation() {
-        return designation;
-    }
-
-    public void setDesignation(String designation) {
-        this.designation = designation;
-    }
 
     public Boolean getActif() {
         return actif;
@@ -148,6 +156,14 @@ public class Module implements Serializable {
     @Override
     public String toString() {
         return "com.csys.compte.domain.Module[ idModule=" + idModule + " ]";
+    }
+
+    public String getDesignation() {
+        return designation;
+    }
+
+    public void setDesignation(String designation) {
+        this.designation = designation;
     }
 
 }

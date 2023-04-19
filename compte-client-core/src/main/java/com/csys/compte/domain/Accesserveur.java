@@ -6,8 +6,12 @@ package com.csys.compte.domain;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -20,10 +24,6 @@ import org.hibernate.envers.Audited;
 import org.hibernate.envers.NotAudited;
 import org.hibernate.envers.RelationTargetAuditMode;
 
-/**
- *
- * @author FATMA-PC
- */
 @Entity
 @Table(name = "Acces_serveur")
 @NamedQueries({
@@ -34,25 +34,31 @@ public class Accesserveur implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_acces")
     private Integer idAcces;
+
     @Size(max = 50)
     @Column(name = "login")
     private String login;
+
     @Size(max = 50)
     @Column(name = "password")
     private String password;
+
     @Size(max = 50)
     @Column(name = "autre_informations")
     private String autreInformations;
+
     @Column(name = "actif")
     private Boolean actif;
+
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @JoinColumn(name = "id_serveur", referencedColumnName = "id_serveur")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Serveur idServeur;
+
     @NotAudited
     @Audited(targetAuditMode = RelationTargetAuditMode.NOT_AUDITED)
     @JoinColumn(name = "id_type_acces", referencedColumnName = "id_type_acces")
